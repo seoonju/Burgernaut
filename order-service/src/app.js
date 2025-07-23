@@ -18,6 +18,9 @@ startServer = () => {
     // create an express app
     const app = express();
 
+    // Disable X-Powered-By header
+    app.disable('x-powered-by');
+
     // middleware to add basic logging
     app.use(morgan(MORGAN_CONFIG, { stream: logger.stream }));
 

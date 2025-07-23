@@ -14,9 +14,13 @@ const placeOrder = (req, res, next) => {
     let orderDetails = req.body;
 
     // calculate total amount
-    orderDetails.total = orderDetails.items.reduce((currentTotal, item) => {
-        return currentTotal + ITEM_PRICE[item.name]*item.quantity
-    }, 0);
+    if (Array.isArray(orderDetails.items)) {
+        orderDetails.total = orderDetails.items.reduce((currentTotal, item) => {
+            return currentTotal + ITEM_PRICE[item.name]*item.quantity
+        }, 0);
+    } else {
+        return res.status(400).json({ error: 'Invalid order items format' });
+    }
 
     let newOrder = new Order(orderDetails);
     newOrder.save((err, order) => {
